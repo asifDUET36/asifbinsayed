@@ -1056,11 +1056,53 @@ body.light-theme .education-badge {
     color: var(--gray);
 }
 
+/* ===== DESKTOP OPTIMIZATION (1025px and above) ===== */
+@media (min-width: 1025px) {
+    .home-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+    }
+    
+    .home-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    .home-image-wrapper {
+        position: relative;
+        margin-top: -360px; /* Pull the photo up to align with first line */
+        left: 30px;
+        transform: translateY(0);
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
+    
+    .floating-photo {
+        position: relative;
+        width: 400px;
+        height: 400px;
+        margin: 0 auto;
+    }
+    
+    .home-description {
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+    
+    .photo-frame {
+        margin-top: 0;
+    }
+}
+
 /* ===== SCROLL INDICATOR ===== */
 .scroll-indicator {
     position: absolute;
-    bottom: 30px;
-    left: 50%;
+    bottom: 710px;
+    left: 55%;
     transform: translateX(-50%);
     display: flex;
     flex-direction: column;
