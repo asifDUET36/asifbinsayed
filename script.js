@@ -116,7 +116,7 @@ function initAOS() {
             once: true,
             offset: 50,
             easing: 'ease-in-out',
-            disable: window.innerWidth < 768 // Disable on mobile for better performance
+            disable: window.innerWidth < 768
         });
     }
 }
@@ -247,7 +247,7 @@ function initGallery() {
     let galleryItems = [];
     let loadedCount = 0;
     let currentPage = 0;
-    const itemsPerPage = window.innerWidth < 768 ? 2 : 4; // Responsive items per page
+    const itemsPerPage = window.innerWidth < 768 ? 2 : 4;
     
     let slideshowInterval = null;
     const slideshowDelay = 3000;
@@ -459,6 +459,13 @@ function initHamburger() {
         hamburger.classList.toggle('active');
         navMenu.classList.toggle('active');
         body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
+        
+        if (navMenu.classList.contains('active')) {
+            const blogLink = document.querySelector('.blog-link');
+            if (blogLink) {
+                blogLink.style.display = 'flex';
+            }
+        }
     });
     
     navLinks.forEach(link => {
@@ -480,7 +487,7 @@ function initHamburger() {
             navMenu.classList.contains('active') && 
             !navMenu.contains(e.target) && 
             !hamburger.contains(e.target) &&
-            !menuClose.contains(e.target)) {
+            menuClose && !menuClose.contains(e.target)) {
             closeMenu();
         }
     });
