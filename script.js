@@ -99,7 +99,7 @@ function initTyped() {
                 'design embedded systems',
                 'develop ML models',
                 'work on biomedical devices',
-                'explore nanoelectronics',
+                'explore electronics',
                 'am a robotics instructor'
             ],
             typeSpeed: 50,
