@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initThemeToggle();
     initSmoothScroll();
     initMenuClose();
+    handleMobileResize();
 });
 
 // ===== LOADER =====
@@ -20,7 +21,7 @@ function initLoader() {
     window.addEventListener('load', () => {
         setTimeout(() => {
             loader.classList.add('hidden');
-        }, 2000); // Show loader for 2 seconds to enjoy the animation
+        }, 2000);
     });
 }
 
@@ -36,7 +37,6 @@ function initNavbar() {
             navbar.classList.remove('scrolled');
         }
         
-        // Active link highlighting
         let current = '';
         const sections = document.querySelectorAll('.section');
         
@@ -65,13 +65,11 @@ function initVisitorInfo() {
     
     if (!visitorLocation || !visitorIP || !visitorTime) return;
     
-    // Update clock
     setInterval(() => {
         const now = new Date();
         visitorTime.textContent = now.toLocaleTimeString();
     }, 1000);
     
-    // Fetch IP and location
     fetch('https://api.ipify.org?format=json')
         .then(response => response.json())
         .then(data => {
@@ -114,10 +112,11 @@ function initTyped() {
 function initAOS() {
     if (typeof AOS !== 'undefined') {
         AOS.init({
-            duration: 1000,
+            duration: 800,
             once: true,
-            offset: 100,
-            easing: 'ease-in-out'
+            offset: 50,
+            easing: 'ease-in-out',
+            disable: window.innerWidth < 768 // Disable on mobile for better performance
         });
     }
 }
@@ -200,7 +199,6 @@ function initProjectData() {
         card.setAttribute('data-aos', 'fade-up');
         card.setAttribute('data-aos-delay', (index % 4) * 100);
         
-        // Generate card links HTML based on availability
         let linksHTML = '';
         if (project.hasCode || project.hasDemo) {
             linksHTML = '<div class="card-links active">';
@@ -212,7 +210,7 @@ function initProjectData() {
             }
             linksHTML += '</div>';
         } else {
-            linksHTML = '<div class="card-links"></div>'; // Empty but keeps structure
+            linksHTML = '<div class="card-links"></div>';
         }
         
         card.innerHTML = `
@@ -233,7 +231,6 @@ function initProjectData() {
         grid.appendChild(card);
     });
     
-    // Refresh AOS
     if (typeof AOS !== 'undefined') {
         AOS.refresh();
     }
@@ -244,26 +241,19 @@ function initGallery() {
     const galleryGrid = document.getElementById('galleryGrid');
     if (!galleryGrid) return;
     
-    // Clear existing content
     galleryGrid.innerHTML = '';
     
-    // List of possible image formats
     const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-    
-    // Array to store gallery items
     let galleryItems = [];
     let loadedCount = 0;
     let currentPage = 0;
-    const itemsPerPage = 4; // Show exactly 4 photos per page
+    const itemsPerPage = window.innerWidth < 768 ? 2 : 4; // Responsive items per page
     
-    // Auto slideshow variables
     let slideshowInterval = null;
-    const slideshowDelay = 3000; // 5 seconds between slides
+    const slideshowDelay = 3000;
     
-    // Create navigation elements
     const galleryContainer = document.querySelector('.gallery-container');
     
-    // Create navigation if it doesn't exist
     let navContainer = document.querySelector('.gallery-navigation');
     if (!navContainer) {
         navContainer = document.createElement('div');
@@ -280,10 +270,8 @@ function initGallery() {
     const nextBtn = navContainer.querySelector('.next-btn');
     const dotsContainer = navContainer.querySelector('.gallery-dots');
     
-    // Clear existing dots
     dotsContainer.innerHTML = '';
     
-    // Function to start slideshow
     function startSlideshow() {
         if (slideshowInterval) {
             clearInterval(slideshowInterval);
@@ -291,14 +279,12 @@ function initGallery() {
         slideshowInterval = setInterval(() => {
             const totalPages = Math.ceil(loadedCount / itemsPerPage);
             if (totalPages > 1) {
-                // Infinite loop - go to next page or back to first
                 const nextPage = (currentPage + 1) % totalPages;
                 goToPage(nextPage);
             }
         }, slideshowDelay);
     }
     
-    // Function to stop slideshow
     function stopSlideshow() {
         if (slideshowInterval) {
             clearInterval(slideshowInterval);
@@ -306,10 +292,9 @@ function initGallery() {
         }
     }
     
-    // Function to load images
     function loadImages() {
         let promises = [];
-        const maxImages = 50; // Maximum number of images to check
+        const maxImages = 50;
         
         for (let i = 1; i <= maxImages; i++) {
             imageExtensions.forEach(ext => {
@@ -352,7 +337,6 @@ function initGallery() {
             } else {
                 navContainer.style.display = 'flex';
                 
-                // Create dots
                 const totalPages = Math.ceil(loadedCount / itemsPerPage);
                 for (let i = 0; i < totalPages; i++) {
                     const dot = document.createElement('button');
@@ -365,30 +349,25 @@ function initGallery() {
                     dotsContainer.appendChild(dot);
                 }
                 
-                // Show first page
                 goToPage(0);
                 
-                // Start slideshow
                 if (totalPages > 1) {
                     startSlideshow();
                 }
                 
-                // No disabled buttons - infinite navigation
                 prevBtn.disabled = false;
                 nextBtn.disabled = false;
             }
         });
     }
     
-    // Function to go to specific page
     function goToPage(pageIndex) {
         const totalPages = Math.ceil(loadedCount / itemsPerPage);
         
-        // Handle infinite navigation
         if (pageIndex < 0) {
-            pageIndex = totalPages - 1; // Go to last page
+            pageIndex = totalPages - 1;
         } else if (pageIndex >= totalPages) {
-            pageIndex = 0; // Go to first page
+            pageIndex = 0;
         }
         
         currentPage = pageIndex;
@@ -396,15 +375,12 @@ function initGallery() {
         const end = Math.min(start + itemsPerPage, loadedCount);
         const pageItems = galleryItems.slice(start, end);
         
-        // Clear grid
         galleryGrid.innerHTML = '';
         
-        // Add items for current page
         pageItems.forEach((item, index) => {
             addGalleryItem(item.path, item.caption, index + (currentPage * itemsPerPage));
         });
         
-        // Update dots
         const dots = dotsContainer.querySelectorAll('.gallery-dot');
         dots.forEach((dot, index) => {
             if (index === currentPage) {
@@ -414,17 +390,14 @@ function initGallery() {
             }
         });
         
-        // Buttons are always enabled for infinite navigation
         prevBtn.disabled = false;
         nextBtn.disabled = false;
         
-        // Refresh AOS
         if (typeof AOS !== 'undefined') {
             AOS.refresh();
         }
     }
     
-    // Function to add gallery item
     function addGalleryItem(imagePath, caption, index) {
         const item = document.createElement('div');
         item.className = 'gallery-item';
@@ -443,22 +416,18 @@ function initGallery() {
         galleryGrid.appendChild(item);
     }
     
-    // Add event listeners for navigation buttons - infinite navigation
     prevBtn.addEventListener('click', () => {
         stopSlideshow();
-        const totalPages = Math.ceil(loadedCount / itemsPerPage);
-        goToPage(currentPage - 1); // Will wrap to last page if negative
+        goToPage(currentPage - 1);
         startSlideshow();
     });
     
     nextBtn.addEventListener('click', () => {
         stopSlideshow();
-        const totalPages = Math.ceil(loadedCount / itemsPerPage);
-        goToPage(currentPage + 1); // Will wrap to first page if beyond total
+        goToPage(currentPage + 1);
         startSlideshow();
     });
     
-    // Pause slideshow when hovering over gallery
     galleryContainer.addEventListener('mouseenter', stopSlideshow);
     galleryContainer.addEventListener('mouseleave', () => {
         const totalPages = Math.ceil(loadedCount / itemsPerPage);
@@ -467,7 +436,6 @@ function initGallery() {
         }
     });
     
-    // Start loading images
     loadImages();
 }
 
@@ -476,21 +444,45 @@ function initHamburger() {
     const hamburger = document.querySelector('.hamburger');
     const navMenu = document.querySelector('.nav-menu');
     const navLinks = document.querySelectorAll('.nav-link');
+    const menuClose = document.querySelector('.menu-close');
+    const body = document.body;
     
     if (!hamburger || !navMenu) return;
+    
+    function closeMenu() {
+        hamburger.classList.remove('active');
+        navMenu.classList.remove('active');
+        body.style.overflow = '';
+    }
     
     hamburger.addEventListener('click', () => {
         hamburger.classList.toggle('active');
         navMenu.classList.toggle('active');
-        document.body.classList.toggle('menu-open');
+        body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
     });
     
     navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            hamburger.classList.remove('active');
-            navMenu.classList.remove('active');
-            document.body.classList.remove('menu-open');
-        });
+        link.addEventListener('click', closeMenu);
+    });
+    
+    if (menuClose) {
+        menuClose.addEventListener('click', closeMenu);
+    }
+    
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+            closeMenu();
+        }
+    });
+    
+    document.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768 && 
+            navMenu.classList.contains('active') && 
+            !navMenu.contains(e.target) && 
+            !hamburger.contains(e.target) &&
+            !menuClose.contains(e.target)) {
+            closeMenu();
+        }
     });
 }
 
@@ -506,6 +498,16 @@ function initMenuClose() {
         hamburger.classList.remove('active');
         navMenu.classList.remove('active');
         document.body.classList.remove('menu-open');
+        document.body.style.overflow = '';
+    });
+}
+
+// ===== HANDLE MOBILE RESIZE =====
+function handleMobileResize() {
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+            document.body.style.overflow = '';
+        }
     });
 }
 
@@ -514,7 +516,6 @@ function initThemeToggle() {
     const toggle = document.getElementById('themeToggle');
     if (!toggle) return;
     
-    // Check for saved theme preference
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'light') {
         document.body.classList.add('light-theme');
@@ -566,7 +567,6 @@ function showNotification(message, type = 'info') {
         <span>${message}</span>
     `;
     
-    // Add styles if they don't exist
     if (!document.querySelector('#notification-styles')) {
         const style = document.createElement('style');
         style.id = 'notification-styles';
@@ -619,6 +619,16 @@ function showNotification(message, type = 'info') {
             }
             body.light-theme .notification-info i {
                 color: #00C6FB;
+            }
+            
+            @media (max-width: 768px) {
+                .notification {
+                    top: 10px;
+                    right: 10px;
+                    left: 10px;
+                    padding: 12px 20px;
+                    font-size: 0.9rem;
+                }
             }
         `;
         document.head.appendChild(style);
