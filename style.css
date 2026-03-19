@@ -66,7 +66,7 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* ===== LOADER - Electrical & Binary Themed ===== */
+/* ===== LOADER ===== */
 .loader-wrapper {
     position: fixed;
     top: 0;
@@ -1059,8 +1059,8 @@ body.light-theme .education-badge {
 /* ===== SCROLL INDICATOR ===== */
 .scroll-indicator {
     position: absolute;
-    bottom: 710px;
-    left: 55%;
+    bottom: 30px;
+    left: 50%;
     transform: translateX(-50%);
     display: flex;
     flex-direction: column;
@@ -2223,7 +2223,9 @@ body.light-theme .footer-bottom {
         align-items: center;
         transition: 0.3s ease;
         z-index: 999;
-        padding: 40px 0;
+        padding: 30px 20px !important;
+        display: flex !important;
+        gap: 5px !important;
     }
     
     body.light-theme .nav-menu {
@@ -2236,15 +2238,54 @@ body.light-theme .footer-bottom {
     }
     
     .nav-menu li {
-        margin: 15px 0;
+        margin: 5px 0 !important;
         width: 100%;
         text-align: center;
     }
     
     .nav-link {
         display: block;
-        padding: 12px 20px;
-        font-size: 1.1rem;
+        padding: 8px 15px !important;
+        font-size: 1rem !important;
+        border-radius: 30px;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-link:hover,
+    .nav-link.active {
+        background: var(--gradient-primary);
+        color: white !important;
+    }
+    
+    .nav-link:hover::before,
+    .nav-link.active::before {
+        display: none;
+    }
+    
+    .blog-link {
+        justify-content: center;
+        padding: 8px 15px !important;
+        background: rgba(42, 123, 155, 0.2);
+        border-radius: 30px;
+        margin-top: 5px !important;
+        display: flex !important;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .nav-menu li:last-child {
+        display: block !important;
+        margin-top: 10px !important;
+        border-top: 1px solid rgba(255,255,255,0.1);
+        padding-top: 15px;
+    }
+    
+    body.light-theme .nav-menu li:last-child {
+        border-top-color: rgba(0,0,0,0.1);
+    }
+    
+    body.light-theme .blog-link {
+        background: rgba(0, 198, 251, 0.2);
     }
     
     .hamburger {
@@ -2257,28 +2298,56 @@ body.light-theme .footer-bottom {
         min-height: auto;
     }
     
+    .home-image-wrapper {
+        margin-top: 20px !important;
+        margin-bottom: 10px !important;
+    }
+    
     .floating-photo {
-        width: 280px !important;
-        height: 280px !important;
+        width: 240px !important;
+        height: 240px !important;
+        margin-top: 10px !important;
+    }
+    
+    .photo-frame {
+        animation: float-mobile 4s ease-in-out infinite;
+    }
+    
+    @keyframes float-mobile {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
+    }
+    
+    .education-badge {
+        bottom: -5px !important;
+        right: -5px !important;
+        padding: 6px 12px !important;
+        font-size: 0.8rem;
     }
     
     .title-name {
-        font-size: 2.2rem !important;
+        font-size: 2rem !important;
         white-space: normal;
         display: block;
+        margin-top: 5px !important;
     }
     
     .title-greeting {
-        font-size: 1rem;
+        font-size: 0.95rem !important;
+        margin-bottom: 5px !important;
     }
     
     .home-typed-container {
-        font-size: 1.3rem;
+        font-size: 1.2rem !important;
+        margin-bottom: 15px !important;
     }
     
     .home-description {
-        font-size: 0.95rem;
-        padding: 0 15px;
+        font-size: 0.9rem !important;
+        line-height: 1.5 !important;
+        margin-bottom: 20px !important;
+        text-align: left !important;
+        padding: 0 5px !important;
     }
     
     .home-badge {
@@ -2292,28 +2361,61 @@ body.light-theme .footer-bottom {
     
     .current-interests {
         text-align: center;
+        margin-bottom: 20px !important;
+    }
+    
+    .current-interests h3 {
+        font-size: 1.1rem !important;
+        justify-content: center;
     }
     
     .interests-pills {
         justify-content: center;
+        gap: 8px !important;
+    }
+    
+    .interest-pill {
+        padding: 4px 12px !important;
+        font-size: 0.8rem !important;
     }
     
     .home-buttons {
         flex-direction: column;
-        padding: 0 20px;
+        padding: 0 5px !important;
+        gap: 12px !important;
     }
     
     .btn {
         width: 100%;
         justify-content: center;
+        padding: 12px 20px !important;
+        font-size: 0.95rem !important;
     }
     
-    .education-badge {
-        bottom: -10px;
-        right: 0;
-        left: 0;
-        margin: 0 auto;
-        width: fit-content;
+    .home-content {
+        padding: 0 15px !important;
+    }
+    
+    .uni-card {
+        padding: 12px 15px !important;
+        margin: 0 5px !important;
+    }
+    
+    .uni-item {
+        gap: 10px !important;
+    }
+    
+    .uni-item i {
+        font-size: 1rem !important;
+        width: 20px !important;
+    }
+    
+    .uni-label {
+        font-size: 0.7rem !important;
+    }
+    
+    .uni-link {
+        font-size: 0.85rem !important;
     }
     
     /* Visitor Bar */
@@ -2471,16 +2573,29 @@ body.light-theme .footer-bottom {
 
 @media (max-width: 480px) {
     .floating-photo {
-        width: 220px !important;
-        height: 220px !important;
+        width: 200px !important;
+        height: 200px !important;
     }
     
     .title-name {
         font-size: 1.8rem !important;
     }
     
+    .home-typed-container {
+        font-size: 1.1rem !important;
+    }
+    
+    .nav-menu {
+        width: 90% !important;
+    }
+    
+    .nav-link {
+        font-size: 0.95rem !important;
+        padding: 6px 12px !important;
+    }
+    
     .education-badge {
-        display: none;
+        display: none !important;
     }
     
     .gallery-grid {
@@ -2520,5 +2635,26 @@ body.light-theme .footer-bottom {
     
     .visitor-content {
         font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .floating-photo {
+        width: 180px !important;
+        height: 180px !important;
+    }
+    
+    .title-name {
+        font-size: 1.5rem !important;
+    }
+    
+    .btn {
+        padding: 10px 15px !important;
+        font-size: 0.85rem !important;
+    }
+    
+    .interest-pill {
+        padding: 3px 8px !important;
+        font-size: 0.7rem !important;
     }
 }
